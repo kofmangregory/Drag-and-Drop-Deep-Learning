@@ -1,0 +1,199 @@
+<!-- builder.html -->
+<!-- Authors: Tyler Griggs and Gregory Kofman -->
+<!-- Neural Net building page -->
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<!-- Character set -->
+		<meta charset="UTF-8"/>
+
+		<!-- Revisit title later -->
+		<title>Drag Learning</title>
+
+		<!-- Bootstrap CSS link --> 
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+		<!-- Custom CSS -->
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		
+		<!-- Bootstrap's required JS links -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+		<!-- W3 Styles -->
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		
+		<style>
+			html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: white;
+            }
+			.layer-selection {
+				background-color:#e0e0e0;
+				position:absolute;
+				bottom:0;
+				top:52px;
+				width:15%;
+				text-align:center;
+				border-right: 2px solid #999999; /* Medium Grey */
+			}
+			.layer-button {
+				background-color: white;
+				color: #4f4f4f;
+				border: 2px solid #990000; /* Crimson */
+				text-align: left;
+				width:85%;
+				margin-top:5px;
+				margin-bottom:5px;
+				transition-duration: 0.4s;
+			}
+			.layer-button:hover {
+				background-color: #990000 !important;
+				color: white !important;
+			}
+			.editing-area {
+				background-color:white;
+				position:absolute;
+				bottom:0;
+				top:52px;
+				left:15%;
+				width:70%;
+			}
+			.parameter-selection {
+				background-color:#e0e0e0;
+				position:absolute;
+				bottom:0;
+				top:52px;
+				left:85%;
+				width:15%;
+				text-align:center;
+				border-left: 2px solid #999999; /* Medium Grey */
+			}
+			.label-input {
+				margin-top:5px;
+				margin-bottom:5px
+			}
+			.param-label {
+				margin-left:10%;
+				margin-bottom:0;
+				color:#4f4f4f;
+			}
+			.param-multi-input {
+				width:85%;
+				margin-left:7.5%;
+				margin-top:0;
+			}
+			.param-single-input {
+				width:100%;
+				margin-left:7.5%;
+				margin-top:0;
+			}
+			button, input, select {
+				outline: none !important;
+			}
+		</style>
+
+	</head>
+
+	<body>
+	
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#990000 !important;">
+  			<a class="navbar-brand" href="#">Drag Learning</a>
+  			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    			<span class="navbar-toggler-icon"></span>
+  			</button>
+  			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+    			<ul class="navbar-nav">
+      				<li class="nav-item active">
+        				<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+      				</li>
+      				<li class="nav-item">
+        				<a class="nav-link" href="#">About</a>
+      				</li>
+      				<li class="nav-item">
+        				<a class="nav-link" href="#">Meet the Team</a>
+      				</li>
+      				<li class="nav-item">
+      					<a class="nav-link" href="#">Contact Us</a>
+      				</li>
+    			</ul>
+  			</div>
+		</nav>
+
+		<!-- Layer Selection - Left Side-Bar -->
+		<div class="layer-selection">
+			<p style="font-size:24px;color:#990000;margin:15px;">Layers</p>
+			<button id="dense-button" onclick="show('dense-div')" class="layer-button w3-button w3-round-large">Dense</button>
+			<button id="act-button" onclick="show('act-div')" class="layer-button w3-button w3-round-large">Activation</button>
+			<button id="drop-button" onclick="show('dropout-div')" class="layer-button w3-button w3-round-large">Dropout</button>
+		</div>
+		
+		<!-- Center Editing Area -->
+		<div class="editing-area" style="background-image:url('images/graphBG.png')">
+		</div>
+		
+		<!-- Parameter Selection Area - Right Side-Bar -->
+		<div class="parameter-selection">
+			<p style="font-size:24px;color:#990000;margin:15px;">Parameters</p>
+			<div id="dropout-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
+				<div class="label-input">
+					<label class="param-label">Rate</label>
+					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="0.1"></p>
+				</div>
+				
+				<div class="label-input">
+					<label class="param-label">Seed</label>
+					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="42"></p>
+				</div>			
+			</div> 
+		</div>
+		
+		
+		
+		
+		<!-- divs for Layer Types - to be dynamically added 
+		<div id="dense-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
+			<div class="label-input">
+				<label class="param-label">Units</label>
+				<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="32"></p>
+			</div>
+			
+			<div class="label-input">
+				<label class="param-label">Activation</label>
+				<select class="w3-select w3-border w3-round-large param-multi-input" name="select" name="option">
+					<option value="None">None</option>
+					<option value="softmax">softmax</option>
+					<option value="relu">relu</option>
+					<option value="tanh">tanh</option>
+					<option value="sigmoid">sigmoid</option>
+				</select>
+			</div>				
+		</div> 
+		
+		<div id="act-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
+			<div class="label-input">
+				<label class="param-label">Activation</label>
+				<select class="w3-select w3-border w3-round-large param-single-input" name="select" name="option">
+					<option value="softmax">softmax</option>
+					<option value="relu">relu</option>
+					<option value="tanh">tanh</option>
+					<option value="sigmoid">sigmoid</option>
+				</select>
+			</div>			
+			
+		</div> 
+		-->
+		
+
+	</body>
+
+</html>
