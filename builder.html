@@ -64,7 +64,7 @@
 				position:absolute;
 				bottom:0;
 				top:52px;
-				left:15%;
+				left:16%;
 				width:70%;
 			}
 			.parameter-selection {
@@ -95,6 +95,33 @@
 				width:100%;
 				margin-left:7.5%;
 				margin-top:0;
+			}
+			.desc-arrow-container {
+				position:absolute;
+				top:50%;
+				height:150px;
+				margin-top:-75px;
+				width:200px;
+				display:none;
+				cursor: pointer;
+			}
+			.desc-container {
+				box-shadow: 3px 6px 6px black;
+				background-color: #b7b7b7;
+				border: 4px solid #990000; /* Crimson */
+				border-radius:25px;
+				width:150px;
+				height:150px;
+			}
+			.right-arrow {
+				position:absolute;
+				top:50%;
+				left:150px;
+				margin-top:-20px;
+				width:50px;
+				height:40px;
+				background-image:url('images/rightPointer.png');
+				background-size:cover;
 			}
 			button, input, select {
 				outline: none !important;
@@ -132,19 +159,86 @@
 		<!-- Layer Selection - Left Side-Bar -->
 		<div class="layer-selection">
 			<p style="font-size:24px;color:#990000;margin:15px;">Layers</p>
-			<button id="dense-button" onclick="show('dense-div')" class="layer-button w3-button w3-round-large">Dense</button>
-			<button id="act-button" onclick="show('act-div')" class="layer-button w3-button w3-round-large">Activation</button>
-			<button id="drop-button" onclick="show('dropout-div')" class="layer-button w3-button w3-round-large">Dropout</button>
+			<button id="dense-button" onclick="showParams('dense-div');addLayer('dense-box0');" class="layer-button w3-button w3-round-large">Dense</button>
+			<button id="act-button" onclick="showParams('act-div');addLayer('act-box0');" class="layer-button w3-button w3-round-large">Activation</button>
+			<button id="drop-button" onclick="showParams('dropout-div');addLayer('drop-box0');" class="layer-button w3-button w3-round-large">Dropout</button>
 		</div>
 		
+		
+		
+		
 		<!-- Center Editing Area -->
-		<div class="editing-area" style="background-image:url('images/graphBG.png')">
+		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;">
+			<!-- Divs for Layers - to be Dynamically added to above container -->
+			<div id="dense-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dense-div')">
+				<div class="desc-container">
+					<p style="font-size:24px;">Dense</p>
+					<p>Units: 32</p>
+					<p>Activation: None</p>
+				</div>
+				<div class="right-arrow">
+				</div>
+			</div>
+			
+			<div id="act-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('act-div')">
+				<div class="desc-container">
+					<p style="font-size:24px;">Activation</p>
+					<p>Activation: softmax</p>
+				</div>
+				<div class="right-arrow">
+				</div>
+			</div>
+			
+			<div id="drop-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dropout-div')">
+				<div class="desc-container">
+					<p style="font-size:24px;">Dropout</p>
+					<p>Rate: 0.1</p>
+					<p>Seed: 42</p>
+				</div>
+				<div class="right-arrow">
+				</div>
+			</div>
 		</div>
+		
 		
 		<!-- Parameter Selection Area - Right Side-Bar -->
 		<div class="parameter-selection">
 			<p style="font-size:24px;color:#990000;margin:15px;">Parameters</p>
-			<div id="dropout-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
+			
+			<!-- Div for Dense Parameter Selection -->
+			<div id="dense-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
+				<div class="label-input">
+					<label class="param-label">Units</label>
+					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="32"></p>
+				</div>
+				
+				<div class="label-input">
+					<label class="param-label">Activation</label>
+					<select class="w3-select w3-border w3-round-large param-multi-input" name="select" name="option">
+						<option value="None">None</option>
+						<option value="softmax">softmax</option>
+						<option value="relu">relu</option>
+						<option value="tanh">tanh</option>
+						<option value="sigmoid">sigmoid</option>
+					</select>
+				</div>				
+			</div> 
+			
+			<!-- Div for Activation Parameter Selection -->
+			<div id="act-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
+				<div class="label-input">
+					<label class="param-label">Activation</label>
+					<select class="w3-select w3-border w3-round-large param-single-input" name="select" name="option">
+						<option value="softmax">softmax</option>
+						<option value="relu">relu</option>
+						<option value="tanh">tanh</option>
+						<option value="sigmoid">sigmoid</option>
+					</select>
+				</div>	
+			</div> 
+			
+			<!-- Div for Dropout Parameter Selection -->
+			<div id="dropout-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
 				<div class="label-input">
 					<label class="param-label">Rate</label>
 					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="0.1"></p>
@@ -155,45 +249,68 @@
 					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="42"></p>
 				</div>			
 			</div> 
+			<button id="save" style="position:absolute; bottom:50px;left:32%;display:none;" onclick="update()">Update</button>
 		</div>
-		
-		
-		
-		
-		<!-- divs for Layer Types - to be dynamically added 
-		<div id="dense-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
-			<div class="label-input">
-				<label class="param-label">Units</label>
-				<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input" type="text" value="32"></p>
-			</div>
-			
-			<div class="label-input">
-				<label class="param-label">Activation</label>
-				<select class="w3-select w3-border w3-round-large param-multi-input" name="select" name="option">
-					<option value="None">None</option>
-					<option value="softmax">softmax</option>
-					<option value="relu">relu</option>
-					<option value="tanh">tanh</option>
-					<option value="sigmoid">sigmoid</option>
-				</select>
-			</div>				
-		</div> 
-		
-		<div id="act-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;">
-			<div class="label-input">
-				<label class="param-label">Activation</label>
-				<select class="w3-select w3-border w3-round-large param-single-input" name="select" name="option">
-					<option value="softmax">softmax</option>
-					<option value="relu">relu</option>
-					<option value="tanh">tanh</option>
-					<option value="sigmoid">sigmoid</option>
-				</select>
-			</div>			
-			
-		</div> 
-		-->
-		
-
 	</body>
+	
+	<script>
+		// track selected layer
+		var selected;
+		
+		// track where new layer block should go
+		var left = 50;
+		var right = $('#drop-box0');
+		
+		// show the parameters of a given layer div type
+		function showParams(layer_div) {
+			<!-- Hide Divs -->
+			document.getElementById('dense-div').style.display = "none";
+			document.getElementById('act-div').style.display = "none";
+			document.getElementById('dropout-div').style.display = "none";
+		
+			<!-- Show Relevant Div -->
+			document.getElementById(layer_div).style.display = "block";
+			document.getElementById('save').style.display = "block";
+		}
+		
+		
+		function addLayer(base_id) {
+			// get the last DIV which ID starts with base_id
+			var $div = $('div[id^=' + base_id + ']:last');
+			
+			// Read the Number from that DIV's ID (i.e: 3 from "klon3")
+			// And increment that number by 1
+			var num = parseInt( $div.prop("id").match(/\d+/g), 10 ) +1;
+			
+			// Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+			var $newdiv = $div.clone().prop('id', base_id + num );
+			
+			// clone html
+			$newdiv.html($div.html());
+
+			// Finally insert $klon wherever you 
+			right.after($newdiv);
+			right = $newdiv;
+			
+			// display new layer and update correct location
+			document.getElementById(base_id + num).style.display = "block";
+			document.getElementById(base_id + num).style.left = left + "px";
+			left = left + 200;
+			
+			// update selected
+			selected = $newdiv
+		}	
+		
+		// update which layer is selected
+		function updateSelected(id) {
+			selected = $('#' + id)
+		}
+		
+		// updates parameters of selected box
+		function update() {
+			
+		}	
+	
+	</script>
 
 </html>
