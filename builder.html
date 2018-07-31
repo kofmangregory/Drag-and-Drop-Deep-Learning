@@ -169,7 +169,7 @@
 		
 		
 		<!-- Center Editing Area -->
-		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;">
+		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;overflow:scroll;">
 			<!-- Divs for Layers - to be Dynamically added to above container -->
 			<div id="dense-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dense-div')">
 				<div class="desc-container">
@@ -319,6 +319,7 @@
 			// empty out div of selected id
 			selected.children(".desc-container").empty();
 			
+			// populate div with input
 			if (paramSelected.prop('id') === 'dense-div') {
 			
 				var title = '<p class="layer-title">Dense</p>';
