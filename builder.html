@@ -252,7 +252,8 @@
 					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input seed" type="text" value="42"></p>
 				</div>			
 			</div> 
-			<button id="save" style="position:absolute; bottom:50px;left:32%;display:none;" onclick="update()">Update</button>
+			<button id="save" style="position:absolute; bottom:100px;left:32%;display:none;" onclick="update()">Update</button>
+			<button id="delete" style="position:absolute; bottom:50px;left:32%;display:none;" onclick="del()">Delete</button>
 		</div>
 	</body>
 
@@ -263,6 +264,7 @@
 		
 		// track where new layer block should go
 		var left = 50;
+		// anchor position to start positioning layer divs
 		var right = $('#drop-box0');
 		
 		// show the parameters of a given layer div type
@@ -275,11 +277,12 @@
 			<!-- Show Relevant Div -->
 			document.getElementById(layer_div).style.display = "block";
 			document.getElementById('save').style.display = "block";
+			document.getElementById('delete').style.display = "block";
 			
 			paramSelected = $("#" + layer_div);
 		}
 		
-		
+		// adds layer box of type base_id
 		function addLayer(base_id) {
 			// get the last DIV which ID starts with base_id
 			var $div = $('div[id^=' + base_id + ']:last');
@@ -307,13 +310,11 @@
 			selected = $newdiv
 		}	
 		
-		
 		// update which layer is selected
 		function updateSelected(id) {
 			selected = $('#' + id)
 		}
-		
-		
+				
 		// updates parameters of selected box
 		function update() {
 			// empty out div of selected id
@@ -344,6 +345,46 @@
 			}
 		}
 	
+		// delete given layer and push all next layers back
+		function del() {
+			// remove from view
+			selected.css('display', 'none');
+						
+			// unselect paramSelected
+			paramSelected = null;
+			
+			<!-- Hide Divs -->
+			document.getElementById('dense-div').style.display = "none";
+			document.getElementById('act-div').style.display = "none";
+			document.getElementById('dropout-div').style.display = "none";
+			document.getElementById('save').style.display = "none";
+			document.getElementById('delete').style.display = "none";
+			
+			// position of deleted div
+			leftPos = parseInt(selected.css('left'));
+
+			// move all layers located after removed div back 200px
+			$('.desc-arrow-container').each(function(i, obj) {
+				// left position of each div in iteration
+				curLeft = parseInt(obj.style.left);
+				if (curLeft > leftPos) {
+					obj.style.left = (curLeft-200) + 'px';
+					left = left - 200;
+				}
+			});
+			
+			/* TODO
+			// set selected to next layer - wraps to front if deleting last
+			$('.desc-arrow-container').each(function(i, obj) {
+				// if it is a valid layer
+				if (obj.style.display != 'none') {
+					// display it
+					// access param display by id of obj once you update param selection
+				}
+			});
+			*/
+		}
+			
 	</script>
 
 </html>
