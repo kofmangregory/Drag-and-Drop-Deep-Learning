@@ -28,108 +28,8 @@
 		<!-- W3 Styles -->
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 		
-		<style>
-			html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                background-color: white;
-            }
-			.layer-selection {
-				background-color:#e0e0e0;
-				position:absolute;
-				bottom:0;
-				top:52px;
-				width:15%;
-				text-align:center;
-				border-right: 2px solid #999999; /* Medium Grey */
-			}
-			.layer-button {
-				background-color: white;
-				color: #4f4f4f;
-				border: 2px solid #990000; /* Crimson */
-				text-align: left;
-				width:85%;
-				margin-top:5px;
-				margin-bottom:5px;
-				transition-duration: 0.4s;
-			}
-			.layer-button:hover {
-				background-color: #990000 !important;
-				color: white !important;
-			}
-			.editing-area {
-				background-color:white;
-				position:absolute;
-				bottom:0;
-				top:52px;
-				left:16%;
-				width:70%;
-			}
-			.parameter-selection {
-				background-color:#e0e0e0;
-				position:absolute;
-				bottom:0;
-				top:52px;
-				left:85%;
-				width:15%;
-				text-align:center;
-				border-left: 2px solid #999999; /* Medium Grey */
-			}
-			.label-input {
-				margin-top:5px;
-				margin-bottom:5px
-			}
-			.param-label {
-				margin-left:10%;
-				margin-bottom:0;
-				color:#4f4f4f;
-			}
-			.param-multi-input {
-				width:85%;
-				margin-left:7.5%;
-				margin-top:0;
-			}
-			.param-single-input {
-				width:100%;
-				margin-left:7.5%;
-				margin-top:0;
-			}
-			.desc-arrow-container {
-				position:absolute;
-				top:50%;
-				height:150px;
-				margin-top:-75px;
-				width:200px;
-				display:none;
-				cursor: pointer;
-			}
-			.desc-container {
-				box-shadow: 3px 6px 6px black;
-				background-color: #b7b7b7;
-				border: 4px solid #990000; /* Crimson */
-				border-radius:25px;
-				width:150px;
-				height:150px;
-			}
-			.right-arrow {
-				position:absolute;
-				top:50%;
-				left:150px;
-				margin-top:-20px;
-				width:50px;
-				height:40px;
-				background-image:url('images/rightPointer.png');
-				background-size:cover;
-			}
-			.layer-title {
-				font-size:24px;
-			}
-			button, input, select {
-				outline: none !important;
-			}
-		</style>
+		<!-- Custom CSS -->
+		<link rel="stylesheet" type="text/css" href="css/builder.css">
 
 	</head>
 
@@ -177,7 +77,7 @@
 					<p>Units: 32</p>
 					<p>Activation: None</p>
 				</div>
-				<div class="right-arrow">
+				<div class="right-arrow" style="background-image:url('images/rightPointer.png');">
 				</div>
 			</div>
 			
@@ -186,7 +86,7 @@
 					<p class="layer-title">Activation</p>
 					<p>Activation: softmax</p>
 				</div>
-				<div class="right-arrow">
+				<div class="right-arrow" style="background-image:url('images/rightPointer.png');">
 				</div>
 			</div>
 			
@@ -196,7 +96,7 @@
 					<p>Rate: 0.1</p>
 					<p>Seed: 42</p>
 				</div>
-				<div class="right-arrow">
+				<div class="right-arrow" style="background-image:url('images/rightPointer.png');">
 				</div>
 			</div>
 		</div>
