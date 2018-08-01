@@ -165,11 +165,13 @@
 			<button id="dense-button" onclick="showParams('dense-div');addLayer('dense-box0');" class="layer-button w3-button w3-round-large">Dense</button>
 			<button id="act-button" onclick="showParams('act-div');addLayer('act-box0');" class="layer-button w3-button w3-round-large">Activation</button>
 			<button id="drop-button" onclick="showParams('dropout-div');addLayer('drop-box0');" class="layer-button w3-button w3-round-large">Dropout</button>
+
+			<button id="export" style="position:absolute; bottom:50px;right:32%;" onclick="createDocumentWithHeader('model.py')">Export</button>
 		</div>
 		
 		
 		<!-- Center Editing Area -->
-		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;">
+		<div class="editing-area row" id="main-editing-area" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;">
 			<!-- Divs for Layers - to be Dynamically added to above container -->
 			<div id="dense-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dense-div')">
 				<div class="desc-container">
@@ -341,6 +343,66 @@
 					
 				selected.children(".desc-container").append(title, rate, speed);
 			}
+		}
+
+		var header = "from keras.models import Sequential\nfrom keras.layers import Dense, Activation, Dropout\n\nimport tensorflow as tf\n\n";
+
+		var content = header;
+
+		function loopThroughLayers(header) {
+			var content = header + "model = Sequential()\n\n";
+
+			var ancestor = document.getElementById('main-editing-area');
+			var descendents = ancestor.getElementsByClassName('desc-arrow-container');
+
+			var dense_prefix = "dense";
+			var activation_prefix = "act";
+
+			var i, e, d;
+
+			for (i = 3; i < descendents.length; ++i) {
+				e = descendents[i];
+
+				if (e.id.substring(0, dense_prefix.length) === dense_prefix) {
+					var units = document.getElementsByClassName('units')[0].value;
+					var activation = document.getElementsByClassName('dense-act')[0].value;
+
+					content += "model.add(Dense(" + units + ", activation=" + activation + "))\n";
+				}
+
+				else if (e.id.substring(0, activation_prefix.length) === activation_prefix) {
+					var activation = document.getElementsByClassName('activation')[0].value;
+
+					content += "model.add(Activation('" + activation + "'))\n"
+				}
+
+				else {
+					var rate = document.getElementsByClassName('rate')[0].value;
+					var seed = document.getElementsByClassName('seed')[0].value
+
+					content += "model.add(Dropout(" + rate + ", seed=" + seed + "))\n"
+				}
+			}
+
+			return content;
+		}
+
+		function createDocumentWithHeader(filename) {
+			
+			var content = loopThroughLayers(header);
+
+			var pom = document.createElement('a')
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    		pom.setAttribute('download', filename);
+
+    		if (document.createEvent) {
+        		var event = document.createEvent('MouseEvents');
+        		event.initEvent('click', true, true);
+        		pom.dispatchEvent(event);
+    		}
+    		else {
+        		pom.click();
+    		}
 		}
 	
 	</script>
