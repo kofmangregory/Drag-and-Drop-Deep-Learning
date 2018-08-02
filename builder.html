@@ -30,17 +30,22 @@
 		
 		<!-- Custom CSS -->
 		<link rel="stylesheet" type="text/css" href="css/builder.css">
+		
+		<!-- Javscript scripts -->
+		<link rel="stylesheet" type="text/css" href="css/builder.css">
 
 	</head>
 
 	<body>
 	
 		<!-- Navbar -->
-		<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#990000 !important;">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
   			<a class="navbar-brand" href="#">Drag Learning</a>
+			
   			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     			<span class="navbar-toggler-icon"></span>
   			</button>
+			
   			<div class="collapse navbar-collapse" id="navbarNavDropdown">
     			<ul class="navbar-nav">
       				<li class="nav-item active">
@@ -57,20 +62,22 @@
       				</li>
     			</ul>
   			</div>
+			
 		</nav>
 
 		
 		<!-- Layer Selection - Left Side-Bar -->
 		<div class="layer-selection">
-			<p style="font-size:24px;color:#990000;margin:15px;">Layers</p>
+			<p>Layers</p>
 			<button id="dense-button" onclick="addParams('param-dense-div0');addLayer('dense-div0');" class="layer-button w3-button w3-round-large">Dense</button>
 			<button id="act-button" onclick="addParams('param-act-div0');addLayer('act-div0');" class="layer-button w3-button w3-round-large">Activation</button>
 			<button id="drop-button" onclick="addParams('param-drop-div0');addLayer('drop-div0');" class="layer-button w3-button w3-round-large">Dropout</button>
 		</div>
 		
 		
-		<!-- Center Editing Area -->
-		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;overflow:scroll;">
+		<!-- Layer Display - Center Area -->
+		<div class="editing-area row" style="background-image:url('images/graphBG.png');">
+		
 			<!-- Divs for Layers - to be Dynamically added to above container -->
 			<div id="dense-div0" class="row desc-arrow-container" onclick="updateSelected(this.id);">
 				<div class="desc-container">
@@ -100,18 +107,19 @@
 				<div class="right-arrow" style="background-image:url('images/rightPointer.png');">
 				</div>
 			</div>
+			
 		</div>
 		
 		
 		<!-- Parameter Selection Area - Right Side-Bar -->
 		<div class="parameter-selection">
-			<p style="font-size:24px;color:#990000;margin:15px;">Parameters</p>
+			<p>Parameters</p>
 			
 			<!-- Div for Dense Parameter Selection -->
 			<div id="param-dense-div0" class="param-input">
 				<div class="label-input">
 					<label class="param-label">Units</label>
-					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input units" type="text" value="32"></input>
+					<input class="w3-input w3-border w3-round-large param-multi-input units" type="text" value="32"></input>
 				</div>
 				
 				<div class="label-input">
@@ -145,16 +153,16 @@
 			<div id="param-drop-div0" class="param-input">
 				<div class="label-input">
 					<label class="param-label">Rate</label>
-					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input rate" type="text" value="0.1"></p>
+					<input class="w3-input w3-border w3-round-large param-multi-input rate" type="text" value="0.1"></p>
 				</div>
 				
 				<div class="label-input">
 					<label class="param-label">Seed</label>
-					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input seed" type="text" value="42"></p>
+					<input class="w3-input w3-border w3-round-large param-multi-input seed" type="text" value="42"></p>
 				</div>			
 			</div> 
-			<button id="save" style="position:absolute; bottom:100px;left:32%;display:none;" onclick="update()">Update</button>
-			<button id="delete" style="position:absolute; bottom:50px;left:32%;display:none;" onclick="del()">Delete</button>
+			<button id="save" style="" onclick="update()">Update</button>
+			<button id="delete" onclick="del()">Delete</button>
 		</div>
 	</body>
 
@@ -178,11 +186,11 @@
 			// get the last DIV which ID starts with base_id
 			var $div = $('div[id^=' + base_id + ']:last');
 									
-			// Read the Number from that DIV's ID (i.e: 3 from "klon3")
+			// Read the Number from that DIV's ID 
 			// And increment that number by 1
 			var num = parseInt( $div.prop("id").match(/\d+/g), 10 ) +1;
 						
-			// Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+			// Clone it and assign the new ID 
 			var $newdiv = $div.clone().prop('id', base_id + num );
 			
 			// clone html
@@ -192,7 +200,7 @@
 			paramRight.after($newdiv);
 			paramRight = $newdiv;
 						
-			<!-- Dispaly Div -->
+			// display the new div 
 			document.getElementById($newdiv.prop('id')).style.display = 'block';
 			document.getElementById('save').style.display = "block";
 			document.getElementById('delete').style.display = "block";
@@ -206,11 +214,11 @@
 			// get the last DIV which ID starts with base_id
 			var $div = $('div[id^=' + base_id + ']:last');
 			
-			// Read the Number from that DIV's ID (i.e: 3 from "klon3")
+			// Read the Number from that DIV's ID
 			// And increment that number by 1
 			var num = parseInt( $div.prop("id").match(/\d+/g), 10 ) +1;
 			
-			// Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+			// Clone it and assign the new ID 
 			var $newdiv = $div.clone().prop('id', base_id + num );
 			
 			// clone html
@@ -233,9 +241,9 @@
 		function updateSelected(id) {
 			selected = $('#' + id)
 			
+			// use layer id to get param layer id
 			var nums = id.match(/\d/g);
 			nums = nums.join("");
-			
 			var letters = id.replace(/[0-9]/g,'');
 			
 			// hide old param div and replace with new one
@@ -272,9 +280,7 @@
 				var speed = '<p>Seed: ' + paramSelected.find('.seed')[0].value + '</p>' ;
 					
 				selected.children(".desc-container").append(title, rate, speed);
-			
 			}
-			
 		}
 	
 		// delete given layer and push all next layers back
@@ -308,7 +314,6 @@
 					updateSelected(obj.id);
 					howMany = i;
 				}
-				
 			});
 			
 			// if no visible layers are left, hide save and delete buttons and param selection
@@ -318,7 +323,6 @@
 				document.getElementById('save').style.display = "none";
 				document.getElementById('delete').style.display = "none";
 			}
-			
 		}
 			
 	</script>

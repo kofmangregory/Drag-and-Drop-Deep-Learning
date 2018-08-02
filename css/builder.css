@@ -5,6 +5,9 @@ html, body {
 	padding: 0;
 	background-color: white;
 }
+.navbar {
+	background-color:#990000 !important;
+}
 .layer-selection {
 	background-color:#e0e0e0;
 	position:absolute;
@@ -13,6 +16,11 @@ html, body {
 	width:15%;
 	text-align:center;
 	border-right: 2px solid #999999; /* Medium Grey */
+}
+.layer-selection p{
+	font-size:24px;
+	color:#990000;
+	margin:15px;
 }
 .layer-button {
 	background-color: white;
@@ -35,6 +43,9 @@ html, body {
 	top:52px;
 	left:16%;
 	width:70%;
+	text-align:center;
+	padding-left:50px;
+	overflow:scroll;
 }
 .parameter-selection {
 	background-color:#e0e0e0;
@@ -45,6 +56,11 @@ html, body {
 	width:15%;
 	text-align:center;
 	border-left: 2px solid #999999; /* Medium Grey */
+}
+.parameter-selection p {
+	font-size:24px;
+	color:#990000;
+	margin:15px;
 }
 .label-input {
 	margin-top:5px;
@@ -59,6 +75,7 @@ html, body {
 	width:85%;
 	margin-left:7.5%;
 	margin-top:0;
+	color:#4f4f4f
 }
 .param-single-input {
 	width:100%;
@@ -103,5 +120,17 @@ button, input, select {
 	position:absolute;
 	bottom:0;
 	top:52px;
+	display:none;
+}
+#save {
+	position:absolute;
+	bottom:100px;
+	left:32%;
+	display:none;
+}
+#delete {
+	position:absolute;
+	bottom:50px;
+	left:32%;
 	display:none;
 }
