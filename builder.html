@@ -197,7 +197,7 @@
 			// clone html
 			$newdiv.html($div.html());
 
-			// Finally insert $klon wherever you 
+			// Finally insert $newdiv wherever you are
 			right.after($newdiv);
 			right = $newdiv;
 			
@@ -205,7 +205,7 @@
 			document.getElementById(base_id + num).style.display = "block";
 			document.getElementById(base_id + num).style.left = left + "px";
 			left = left + 200;
-			
+
 			// update selected
 			selected = $newdiv
 		}	
@@ -262,14 +262,14 @@
 			
 			// position of deleted div
 			leftPos = parseInt(selected.css('left'));
-
+			left = left - 200;
+			
 			// move all layers located after removed div back 200px
 			$('.desc-arrow-container').each(function(i, obj) {
 				// left position of each div in iteration
 				curLeft = parseInt(obj.style.left);
-				if (curLeft > leftPos) {
+				if (curLeft > leftPos && obj.style.display != 'none') {
 					obj.style.left = (curLeft-200) + 'px';
-					left = left - 200;
 				}
 			});
 			
