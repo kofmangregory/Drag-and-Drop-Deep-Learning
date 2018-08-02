@@ -349,17 +349,22 @@
 
 		var content = header;
 
+		// loop through layers and update content string to fill python file
 		function loopThroughLayers(header) {
+			// start of content string is imports and definition of model
 			var content = header + "model = Sequential()\n\n";
 
+			// get all layers in descendents array
 			var ancestor = document.getElementById('main-editing-area');
 			var descendents = ancestor.getElementsByClassName('desc-arrow-container');
 
+			// id prefixes for layer identification
 			var dense_prefix = "dense";
 			var activation_prefix = "act";
 
-			var i, e, d;
+			var i, e;
 
+			// loop through layers
 			for (i = 0; i < descendents.length; ++i) {
 				e = descendents[i];
 
@@ -367,6 +372,7 @@
 				var display_bool = display !== 'none' && display !== "";
 				console.log(display_bool)
 
+				// dense layer
 				if (e.id.substring(0, dense_prefix.length) === dense_prefix && display_bool) {
 					var units = document.getElementsByClassName('units')[0].value;
 					var activation = document.getElementsByClassName('dense-act')[0].value;
@@ -376,12 +382,14 @@
 					content += "model.add(Dense(" + units + ", activation=" + activation + "))" + post_content;
 				}
 
+				// activation layer
 				else if (e.id.substring(0, activation_prefix.length) === activation_prefix && display_bool) {
 					var activation = document.getElementsByClassName('activation')[0].value;
 
 					content += "model.add(Activation('" + activation + "'))" + " # " + activation + " Activation layer\n"
 				}
 
+				// dropout layer
 				else if (display_bool) {
 					var rate = document.getElementsByClassName('rate')[0].value;
 					var seed = document.getElementsByClassName('seed')[0].value
@@ -393,8 +401,10 @@
 			return content;
 		}
 
+		// create document for downloading
 		function createDocumentWithHeader(filename) {
 			
+			// generate content
 			var content = loopThroughLayers(header);
 
 			var pom = document.createElement('a')
