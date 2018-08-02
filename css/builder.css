@@ -125,12 +125,16 @@ button, input, select {
 #save {
 	position:absolute;
 	bottom:100px;
-	left:32%;
+	left:26%;
 	display:none;
+	width:50% !important;
+	text-align:center !important;
 }
 #delete {
 	position:absolute;
 	bottom:50px;
-	left:32%;
+	left:26%;
 	display:none;
+	width:50% !important;
+	text-align:center !important;
 }
