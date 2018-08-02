@@ -319,7 +319,7 @@
 
 					var post_content = (activation === 'None') ? " # Dense layer with " + units + " units and no activation\n" : " # Dense layer with " + units + " units and " + activation + " activation\n"
 
-					content += "model.add(Dense(" + units + ", activation='" + activation + "'))" + post_content;
+					content += (activation === 'None') ? "model.add(Dense(" + units + ", activation=" + activation + "))" + post_content : "model.add(Dense(" + units + ", activation='" + activation + "'))" + post_content;
 				}
 
 				// activation layer
