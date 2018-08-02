@@ -371,27 +371,42 @@
 				var display = e.style.display;
 				var display_bool = display !== 'none' && display !== "";
 
+				var p_list = e.querySelectorAll('p');
+
 				// dense layer
 				if (e.id.substring(0, dense_prefix.length) === dense_prefix && display_bool) {
-					var units = document.getElementsByClassName('units')[0].value;
-					var activation = document.getElementsByClassName('dense-act')[0].value;
+					
+					var units_string = p_list[1].innerHTML;
+					var activation_string = p_list[2].innerHTML;
+	
+					var units = units_string.substring(7, units_string.length)
+					var activation = activation_string.substring(12, activation_string.length);
 
 					var post_content = (activation === 'None') ? " # Dense layer with " + units + " units and no activation\n" : " # Dense layer with " + units + " units and " + activation + " activation\n"
 
-					content += "model.add(Dense(" + units + ", activation=" + activation + "))" + post_content;
+					content += "model.add(Dense(" + units + ", activation='" + activation + "'))" + post_content;
 				}
 
 				// activation layer
 				else if (e.id.substring(0, activation_prefix.length) === activation_prefix && display_bool) {
-					var activation = document.getElementsByClassName('activation')[0].value;
+					
+					var activation_string = p_list[1].innerHTML;
+
+					var activation = activation_string.substring(12, activation_string.length);
 
 					content += "model.add(Activation('" + activation + "'))" + " # " + activation + " Activation layer\n"
 				}
 
 				// dropout layer
 				else if (display_bool) {
-					var rate = document.getElementsByClassName('rate')[0].value;
-					var seed = document.getElementsByClassName('seed')[0].value
+					//var rate = document.getElementsByClassName('rate')[0].value;
+					//var seed = document.getElementsByClassName('seed')[0].value;
+
+					var rate_string = p_list[1].innerHTML;
+					var seed_string = p_list[2].innerHTML;
+
+					var rate = rate_string.substring(6, rate_string.length);
+					var seed = seed_string.substring(6, seed_string.length);
 
 					content += "model.add(Dropout(" + rate + ", seed=" + seed + "))" + " # Dropout layer with " + rate + " rate and " + seed + " seed\n"
 				}
