@@ -345,7 +345,7 @@
 			}
 		}
 
-		var header = "from keras.models import Sequential\nfrom keras.layers import Dense, Activation, Dropout\n\nimport tensorflow as tf\n\n";
+		var header = "# keras imports\nfrom keras.models import Sequential\nfrom keras.layers import Dense, Activation, Dropout\n\n#tensorflow as backend\nimport tensorflow as tf\n\n";
 
 		var content = header;
 
@@ -371,20 +371,22 @@
 					var units = document.getElementsByClassName('units')[0].value;
 					var activation = document.getElementsByClassName('dense-act')[0].value;
 
-					content += "model.add(Dense(" + units + ", activation=" + activation + "))\n";
+					var post_content = (activation === 'None') ? " # Dense layer with " + units + " units and no activation\n" : " # Dense layer with " + units + " units and " + activation + " activation\n"
+
+					content += "model.add(Dense(" + units + ", activation=" + activation + "))" + post_content;
 				}
 
 				else if (e.id.substring(0, activation_prefix.length) === activation_prefix && display_bool) {
 					var activation = document.getElementsByClassName('activation')[0].value;
 
-					content += "model.add(Activation('" + activation + "'))\n"
+					content += "model.add(Activation('" + activation + "'))" + " # " + activation + " Activation layer\n"
 				}
 
 				else if (display_bool) {
 					var rate = document.getElementsByClassName('rate')[0].value;
 					var seed = document.getElementsByClassName('seed')[0].value
 
-					content += "model.add(Dropout(" + rate + ", seed=" + seed + "))\n"
+					content += "model.add(Dropout(" + rate + ", seed=" + seed + "))" + " # Dropout layer with " + rate + " rate and " + seed + " seed\n"
 				}
 			}
 
