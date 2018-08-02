@@ -97,3 +97,11 @@ html, body {
 button, input, select {
 	outline: none !important;
 }
+.param-input {
+	text-align:left;
+	margin:0;
+	position:absolute;
+	bottom:0;
+	top:52px;
+	display:none;
+}

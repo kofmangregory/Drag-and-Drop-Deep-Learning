@@ -59,19 +59,20 @@
   			</div>
 		</nav>
 
+		
 		<!-- Layer Selection - Left Side-Bar -->
 		<div class="layer-selection">
 			<p style="font-size:24px;color:#990000;margin:15px;">Layers</p>
-			<button id="dense-button" onclick="showParams('dense-div');addLayer('dense-box0');" class="layer-button w3-button w3-round-large">Dense</button>
-			<button id="act-button" onclick="showParams('act-div');addLayer('act-box0');" class="layer-button w3-button w3-round-large">Activation</button>
-			<button id="drop-button" onclick="showParams('dropout-div');addLayer('drop-box0');" class="layer-button w3-button w3-round-large">Dropout</button>
+			<button id="dense-button" onclick="addParams('param-dense-div0');addLayer('dense-div0');" class="layer-button w3-button w3-round-large">Dense</button>
+			<button id="act-button" onclick="addParams('param-act-div0');addLayer('act-div0');" class="layer-button w3-button w3-round-large">Activation</button>
+			<button id="drop-button" onclick="addParams('param-drop-div0');addLayer('drop-div0');" class="layer-button w3-button w3-round-large">Dropout</button>
 		</div>
 		
 		
 		<!-- Center Editing Area -->
 		<div class="editing-area row" style="background-image:url('images/graphBG.png');text-align:center;padding-left:50px;overflow:scroll;">
 			<!-- Divs for Layers - to be Dynamically added to above container -->
-			<div id="dense-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dense-div')">
+			<div id="dense-div0" class="row desc-arrow-container" onclick="updateSelected(this.id);">
 				<div class="desc-container">
 					<p class="layer-title">Dense</p>
 					<p>Units: 32</p>
@@ -81,7 +82,7 @@
 				</div>
 			</div>
 			
-			<div id="act-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('act-div')">
+			<div id="act-div0" class="row desc-arrow-container" onclick="updateSelected(this.id);">
 				<div class="desc-container">
 					<p class="layer-title">Activation</p>
 					<p>Activation: softmax</p>
@@ -90,7 +91,7 @@
 				</div>
 			</div>
 			
-			<div id="drop-box0" class="row desc-arrow-container" onclick="updateSelected(this.id);showParams('dropout-div')">
+			<div id="drop-div0" class="row desc-arrow-container" onclick="updateSelected(this.id);">
 				<div class="desc-container">
 					<p class="layer-title">Dropout</p>
 					<p>Rate: 0.1</p>
@@ -107,7 +108,7 @@
 			<p style="font-size:24px;color:#990000;margin:15px;">Parameters</p>
 			
 			<!-- Div for Dense Parameter Selection -->
-			<div id="dense-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
+			<div id="param-dense-div0" class="param-input">
 				<div class="label-input">
 					<label class="param-label">Units</label>
 					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input units" type="text" value="32"></input>
@@ -127,7 +128,7 @@
 			
 			
 			<!-- Div for Activation Parameter Selection -->
-			<div id="act-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
+			<div id="param-act-div0" class="param-input">
 				<div class="label-input">
 					<label class="param-label">Activation</label>
 					<select class="w3-select w3-border w3-round-large param-single-input activation" name="select" name="option">
@@ -141,7 +142,7 @@
 			
 			
 			<!-- Div for Dropout Parameter Selection -->
-			<div id="dropout-div" style="text-align:left;margin:0;position:absolute;bottom:0;top:52px;display:none;">
+			<div id="param-drop-div0" class="param-input">
 				<div class="label-input">
 					<label class="param-label">Rate</label>
 					<input style="color:#4f4f4f" class="w3-input w3-border w3-round-large param-multi-input rate" type="text" value="0.1"></p>
@@ -158,28 +159,46 @@
 	</body>
 
 	<script>
-		// track selected layer
+		// track selected layer and param side bar
 		var selected;
 		var paramSelected;
 		
 		// track where new layer block should go
 		var left = 50;
+		
 		// anchor position to start positioning layer divs
-		var right = $('#drop-box0');
+		var right = $('#drop-div0');
+		var paramRight = $('#param-drop-div0');
 		
 		// show the parameters of a given layer div type
-		function showParams(layer_div) {
+		function addParams(base_id) {
 			<!-- Hide Divs -->
-			document.getElementById('dense-div').style.display = "none";
-			document.getElementById('act-div').style.display = "none";
-			document.getElementById('dropout-div').style.display = "none";
-		
-			<!-- Show Relevant Div -->
-			document.getElementById(layer_div).style.display = "block";
+			$('.param-input').css('display', 'none');
+						
+			// get the last DIV which ID starts with base_id
+			var $div = $('div[id^=' + base_id + ']:last');
+									
+			// Read the Number from that DIV's ID (i.e: 3 from "klon3")
+			// And increment that number by 1
+			var num = parseInt( $div.prop("id").match(/\d+/g), 10 ) +1;
+						
+			// Clone it and assign the new ID (i.e: from num 4 to ID "klon4")
+			var $newdiv = $div.clone().prop('id', base_id + num );
+			
+			// clone html
+			$newdiv.html($div.html());
+			
+			// put it in the right spot
+			paramRight.after($newdiv);
+			paramRight = $newdiv;
+						
+			<!-- Dispaly Div -->
+			document.getElementById($newdiv.prop('id')).style.display = 'block';
 			document.getElementById('save').style.display = "block";
 			document.getElementById('delete').style.display = "block";
 			
-			paramSelected = $("#" + layer_div);
+			// update paramSelected
+			paramSelected = $newdiv
 		}
 		
 		// adds layer box of type base_id
@@ -202,8 +221,8 @@
 			right = $newdiv;
 			
 			// display new layer and update correct location
-			document.getElementById(base_id + num).style.display = "block";
-			document.getElementById(base_id + num).style.left = left + "px";
+			document.getElementById($newdiv.prop('id')).style.display = "block";
+			document.getElementById($newdiv.prop('id')).style.left = left + "px";
 			left = left + 200;
 
 			// update selected
@@ -213,52 +232,56 @@
 		// update which layer is selected
 		function updateSelected(id) {
 			selected = $('#' + id)
+			
+			var nums = id.match(/\d/g);
+			nums = nums.join("");
+			
+			var letters = id.replace(/[0-9]/g,'');
+			
+			// hide old param div and replace with new one
+			paramSelected.css('display', 'none');
+			paramSelected = $('#param-' + letters + nums);
+			paramSelected.css('display', 'block');
 		}
-				
+
 		// updates parameters of selected box
 		function update() {
 			// empty out div of selected id
 			selected.children(".desc-container").empty();
 			
-			// populate div with input
-			if (paramSelected.prop('id') === 'dense-div') {
+			// get base id of selected
+			var letters = selected.prop('id').replace(/[0-9]/g,'');
 			
+			// extract values from param selection tab
+			if (letters === 'dense-div') {
 				var title = '<p class="layer-title">Dense</p>';
-				var units = '<p>Units: ' + document.getElementsByClassName('units')[0].value + '</p>';
-				var activation = '<p>Activation: ' + document.getElementsByClassName('dense-act')[0].value + '</p>';
+				var units = '<p>Units: ' + paramSelected.find('.units')[0].value + '</p>';
+				var activation = '<p>Activation: ' + paramSelected.find('.dense-act')[0].value + '</p>';
 				
 				selected.children(".desc-container").append(title, units, activation);
 			}
-			else if (paramSelected.prop('id') === 'act-div') {
-			
+			else if (letters === 'act-div') {
 				var title = '<p class="layer-title">Activation</p>';
-				var activation = '<p>Activation: ' + document.getElementsByClassName('activation')[0].value + '</p>'
+				var activation = '<p>Activation: ' + paramSelected.find('.activation')[0].value + '</p>'
 					
 				selected.children(".desc-container").append(title, activation);
 			}
-			else {
+			else if (letters === 'drop-div') {
 				var title = '<p class="layer-title">Dropout</p>';
-				var rate = '<p>Rate: ' + document.getElementsByClassName('rate')[0].value + '</p>' ;
-				var speed = '<p>Seed: ' + document.getElementsByClassName('seed')[0].value + '</p>' ;
+				var rate = '<p>Rate: ' + paramSelected.find('.rate')[0].value + '</p>' ;
+				var speed = '<p>Seed: ' + paramSelected.find('.seed')[0].value + '</p>' ;
 					
 				selected.children(".desc-container").append(title, rate, speed);
+			
 			}
+			
 		}
 	
 		// delete given layer and push all next layers back
 		function del() {
 			// remove from view
 			selected.css('display', 'none');
-						
-			// unselect paramSelected
-			paramSelected = null;
-			
-			<!-- Hide Divs -->
-			document.getElementById('dense-div').style.display = "none";
-			document.getElementById('act-div').style.display = "none";
-			document.getElementById('dropout-div').style.display = "none";
-			document.getElementById('save').style.display = "none";
-			document.getElementById('delete').style.display = "none";
+			paramSelected.css('display', 'none');
 			
 			// position of deleted div
 			leftPos = parseInt(selected.css('left'));
@@ -273,16 +296,29 @@
 				}
 			});
 			
-			/* TODO
-			// set selected to next layer - wraps to front if deleting last
+			// track number of divs
+			var howMany = 0;
+			
+			// set selected to last layer TODO: consider changing
 			$('.desc-arrow-container').each(function(i, obj) {
 				// if it is a valid layer
 				if (obj.style.display != 'none') {
 					// display it
 					// access param display by id of obj once you update param selection
+					updateSelected(obj.id);
+					howMany = i;
 				}
+				
 			});
-			*/
+			
+			// if no visible layers are left, hide save and delete buttons and param selection
+			if (howMany - 2 == 0) {
+				<!-- Hide Divs -->
+				paramSelected.css('display', 'none');
+				document.getElementById('save').style.display = "none";
+				document.getElementById('delete').style.display = "none";
+			}
+			
 		}
 			
 	</script>
