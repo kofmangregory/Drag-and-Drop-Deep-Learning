@@ -72,6 +72,7 @@
 			<button id="dense-button" onclick="addParams('param-dense-div0');addLayer('dense-div0');" class="layer-button w3-button w3-round-large">Dense</button>
 			<button id="act-button" onclick="addParams('param-act-div0');addLayer('act-div0');" class="layer-button w3-button w3-round-large">Activation</button>
 			<button id="drop-button" onclick="addParams('param-drop-div0');addLayer('drop-div0');" class="layer-button w3-button w3-round-large">Dropout</button>
+			<button id="export" style="position:absolute; bottom:50px;right:32%;" onclick="createDocumentWithHeader('model.py')">Export</button>
 		</div>
 		
 		
@@ -281,6 +282,96 @@
 					
 				selected.children(".desc-container").append(title, rate, speed);
 			}
+		}
+
+		var header = "# keras imports\nfrom keras.models import Sequential\nfrom keras.layers import Dense, Activation, Dropout\n\n#tensorflow as backend\nimport tensorflow as tf\n\n";
+
+		var content = header;
+
+		// loop through layers and update content string to fill python file
+		function loopThroughLayers(header) {
+			// start of content string is imports and definition of model
+			var content = header + "model = Sequential()\n\n";
+
+			// get all layers in descendents array
+			var ancestor = document.getElementById('main-editing-area');
+			var descendents = ancestor.getElementsByClassName('desc-arrow-container');
+
+			// id prefixes for layer identification
+			var dense_prefix = "dense";
+			var activation_prefix = "act";
+
+			var i, e;
+
+			// loop through layers
+			for (i = 0; i < descendents.length; ++i) {
+				e = descendents[i];
+
+				var display = e.style.display;
+				var display_bool = display !== 'none' && display !== "";
+
+				var p_list = e.querySelectorAll('p');
+
+				// dense layer
+				if (e.id.substring(0, dense_prefix.length) === dense_prefix && display_bool) {
+					
+					var units_string = p_list[1].innerHTML;
+					var activation_string = p_list[2].innerHTML;
+	
+					var units = units_string.substring(7, units_string.length)
+					var activation = activation_string.substring(12, activation_string.length);
+
+					var post_content = (activation === 'None') ? " # Dense layer with " + units + " units and no activation\n" : " # Dense layer with " + units + " units and " + activation + " activation\n"
+
+					content += (activation === 'None') ? "model.add(Dense(" + units + ", activation=" + activation + "))" + post_content : "model.add(Dense(" + units + ", activation='" + activation + "'))" + post_content;
+				}
+
+				// activation layer
+				else if (e.id.substring(0, activation_prefix.length) === activation_prefix && display_bool) {
+					
+					var activation_string = p_list[1].innerHTML;
+
+					var activation = activation_string.substring(12, activation_string.length);
+
+					content += "model.add(Activation('" + activation + "'))" + " # " + activation + " Activation layer\n"
+				}
+
+				// dropout layer
+				else if (display_bool) {
+					//var rate = document.getElementsByClassName('rate')[0].value;
+					//var seed = document.getElementsByClassName('seed')[0].value;
+
+					var rate_string = p_list[1].innerHTML;
+					var seed_string = p_list[2].innerHTML;
+
+					var rate = rate_string.substring(6, rate_string.length);
+					var seed = seed_string.substring(6, seed_string.length);
+
+					content += "model.add(Dropout(" + rate + ", seed=" + seed + "))" + " # Dropout layer with " + rate + " rate and " + seed + " seed\n"
+				}
+			}
+
+			return content;
+		}
+
+		// create document for downloading
+		function createDocumentWithHeader(filename) {
+			
+			// generate content
+			var content = loopThroughLayers(header);
+
+			var pom = document.createElement('a')
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    		pom.setAttribute('download', filename);
+
+    		if (document.createEvent) {
+        		var event = document.createEvent('MouseEvents');
+        		event.initEvent('click', true, true);
+        		pom.dispatchEvent(event);
+    		}
+    		else {
+        		pom.click();
+    		}
 		}
 	
 		// delete given layer and push all next layers back
