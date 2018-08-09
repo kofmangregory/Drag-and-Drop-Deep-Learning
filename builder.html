@@ -359,6 +359,7 @@
 			
 			// generate content
 			var content = loopThroughLayers(header);
+			content += "\nmodel.compile() #compiling the model\n\n";
 
 			var pom = document.createElement('a')
 			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
