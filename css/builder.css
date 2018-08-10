@@ -138,3 +138,16 @@ button, input, select {
 	width:50% !important;
 	text-align:center !important;
 }
+#export {
+	position:absolute;
+	bottom:50px;
+	right:32%;
+	background-color: white;
+	color: #4f4f4f;
+	border: 2px solid #990000; /* Crimson */
+	transition-duration: 0.4s;
+}
+#export:hover {
+	background-color: #990000 !important;
+	color: white !important;
+}
